@@ -1,12 +1,7 @@
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
-
-const schema = buildSchema(`
-    type Query {
-        hello: String
-    }
-`);
+import { schema } from "./schema/schema";
 
 const root = {
   hello: () => {
@@ -15,6 +10,7 @@ const root = {
 };
 
 const app = express();
+//middleware
 app.use(
   "/graphql",
   graphqlHTTP({
