@@ -5,8 +5,6 @@ import {
   GraphQLSchema,
 } from "graphql";
 
-import _ from "lodash";
-
 const users = [
   { id: "23", firstName: "Bill", age: 30 },
   { id: "47", firstName: "Sam", age: 21 },
