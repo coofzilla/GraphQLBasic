@@ -6,12 +6,20 @@ import {
 } from "graphql";
 
 import axios from "axios";
-import { response } from "express";
 
 const users = [
   { id: "23", firstName: "Bill", age: 30 },
   { id: "47", firstName: "Sam", age: 21 },
 ];
+
+const CompanyType = new GraphQLObjectType({
+  name: "Company",
+  fields: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
+  },
+});
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -19,6 +27,9 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLString },
     firstName: { type: GraphQLString },
     age: { type: GraphQLInt },
+    company: {
+      type: CompanyType,
+    },
   },
 });
 

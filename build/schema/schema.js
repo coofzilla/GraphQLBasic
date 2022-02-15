@@ -19,12 +19,23 @@ const users = [
     { id: "23", firstName: "Bill", age: 30 },
     { id: "47", firstName: "Sam", age: 21 },
 ];
+const CompanyType = new graphql_1.GraphQLObjectType({
+    name: "Company",
+    fields: {
+        id: { type: graphql_1.GraphQLString },
+        name: { type: graphql_1.GraphQLString },
+        description: { type: graphql_1.GraphQLString },
+    },
+});
 const UserType = new graphql_1.GraphQLObjectType({
     name: "User",
     fields: {
         id: { type: graphql_1.GraphQLString },
         firstName: { type: graphql_1.GraphQLString },
         age: { type: graphql_1.GraphQLInt },
+        company: {
+            type: CompanyType,
+        },
     },
 });
 const RootQuery = new graphql_1.GraphQLObjectType({
