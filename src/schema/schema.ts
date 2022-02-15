@@ -5,6 +5,9 @@ import {
   GraphQLSchema,
 } from "graphql";
 
+import axios from "axios";
+import { response } from "express";
+
 const users = [
   { id: "23", firstName: "Bill", age: 30 },
   { id: "47", firstName: "Sam", age: 21 },
@@ -25,8 +28,11 @@ const RootQuery = new GraphQLObjectType({
     user: {
       type: UserType,
       args: { id: { type: GraphQLString } },
-      resolve(parentValue, args) {
-        return users.find((el) => el.id === args.id);
+      async resolve(parentValue, args) {
+        const response = await axios.get(
+          `http://localhost:3000/users/${args.id}`
+        );
+        return response.data;
       },
     },
   },
