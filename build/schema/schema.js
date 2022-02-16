@@ -15,10 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.schema = void 0;
 const graphql_1 = require("graphql");
 const axios_1 = __importDefault(require("axios"));
-const users = [
-    { id: "23", firstName: "Bill", age: 30 },
-    { id: "47", firstName: "Sam", age: 21 },
-];
 const CompanyType = new graphql_1.GraphQLObjectType({
     name: "Company",
     fields: {
@@ -53,6 +49,16 @@ const RootQuery = new graphql_1.GraphQLObjectType({
             resolve(parentValue, args) {
                 return __awaiter(this, void 0, void 0, function* () {
                     const response = yield axios_1.default.get(`http://localhost:3000/users/${args.id}`);
+                    return response.data;
+                });
+            },
+        },
+        company: {
+            type: CompanyType,
+            args: { id: { type: graphql_1.GraphQLString } },
+            resolve(parentValue, args) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const response = yield axios_1.default.get(`http://localhost:3000/companies/${args.id}`);
                     return response.data;
                 });
             },

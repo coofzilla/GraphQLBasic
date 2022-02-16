@@ -7,11 +7,6 @@ import {
 
 import axios from "axios";
 
-const users = [
-  { id: "23", firstName: "Bill", age: 30 },
-  { id: "47", firstName: "Sam", age: 21 },
-];
-
 const CompanyType = new GraphQLObjectType({
   name: "Company",
   fields: {
@@ -48,6 +43,16 @@ const RootQuery = new GraphQLObjectType({
       async resolve(parentValue, args) {
         const response = await axios.get(
           `http://localhost:3000/users/${args.id}`
+        );
+        return response.data;
+      },
+    },
+    company: {
+      type: CompanyType,
+      args: { id: { type: GraphQLString } },
+      async resolve(parentValue, args) {
+        const response = await axios.get(
+          `http://localhost:3000/companies/${args.id}`
         );
         return response.data;
       },
