@@ -74,6 +74,29 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+//mutation used to change/modify/delete data
+const mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    addUser: {
+      type: UserType,
+      args: {
+        firstName: { type: GraphQLString },
+        age: { type: GraphQLInt },
+        companyId: { type: GraphQLString },
+      },
+      resolve() {},
+    },
+  },
+});
+
 export const schema = new GraphQLSchema({
   query: RootQuery,
 });
+
+// use w/GraphiQL f/ spreading query params
+// fragment companyDetails on Company {
+//     id
+//     name
+//     description
+// }
