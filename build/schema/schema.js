@@ -15,17 +15,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.schema = void 0;
 const graphql_1 = require("graphql");
 const axios_1 = __importDefault(require("axios"));
+//circular reference
 const CompanyType = new graphql_1.GraphQLObjectType({
     name: "Company",
-    fields: {
+    //closure not executed until entire file
+    fields: () => ({
         id: { type: graphql_1.GraphQLString },
         name: { type: graphql_1.GraphQLString },
         description: { type: graphql_1.GraphQLString },
-    },
+        users: {
+            type: new graphql_1.GraphQLList(UserType),
+            //parentValue is current company
+            resolve(parentValue, args) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const response = yield axios_1.default.get(`http://localhost:3000/companies/${parentValue.id}/users`);
+                    return response.data;
+                });
+            },
+        },
+    }),
 });
 const UserType = new graphql_1.GraphQLObjectType({
     name: "User",
-    fields: {
+    fields: () => ({
         id: { type: graphql_1.GraphQLString },
         firstName: { type: graphql_1.GraphQLString },
         age: { type: graphql_1.GraphQLInt },
@@ -38,7 +50,7 @@ const UserType = new graphql_1.GraphQLObjectType({
                 });
             },
         },
-    },
+    }),
 });
 const RootQuery = new graphql_1.GraphQLObjectType({
     name: "RootQueryType",
