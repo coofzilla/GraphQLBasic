@@ -84,16 +84,38 @@ const mutation = new graphql_1.GraphQLObjectType({
         addUser: {
             type: UserType,
             args: {
-                firstName: { type: graphql_1.GraphQLString },
-                age: { type: graphql_1.GraphQLInt },
+                //NonNull must provide value or throw error
+                firstName: { type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString) },
+                age: { type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLInt) },
                 companyId: { type: graphql_1.GraphQLString },
             },
-            resolve() { },
+            resolve(parentValue, { firstName, age }) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const response = yield axios_1.default.post("http://localhost:3000/users", {
+                        firstName,
+                        age,
+                    });
+                    return response.data;
+                });
+            },
+        },
+        deleteUser: {
+            type: UserType,
+            args: {
+                id: { type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString) },
+            },
+            resolve(parentValue, { id }) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const response = yield axios_1.default.delete(`http://localhost:3000/users/${id}`);
+                    return response.data;
+                });
+            },
         },
     },
 });
 exports.schema = new graphql_1.GraphQLSchema({
     query: RootQuery,
+    mutation,
 });
 // use w/GraphiQL f/ spreading query params
 // fragment companyDetails on Company {

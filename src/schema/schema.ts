@@ -5,6 +5,7 @@ import {
   GraphQLSchema,
   GraphQLType,
   GraphQLList,
+  GraphQLNonNull,
 } from "graphql";
 
 import axios from "axios";
@@ -81,17 +82,37 @@ const mutation = new GraphQLObjectType({
     addUser: {
       type: UserType,
       args: {
-        firstName: { type: GraphQLString },
-        age: { type: GraphQLInt },
+        //NonNull must provide value or throw error
+        firstName: { type: new GraphQLNonNull(GraphQLString) },
+        age: { type: new GraphQLNonNull(GraphQLInt) },
         companyId: { type: GraphQLString },
       },
-      resolve() {},
+      async resolve(parentValue, { firstName, age }) {
+        const response = await axios.post("http://localhost:3000/users", {
+          firstName,
+          age,
+        });
+        return response.data;
+      },
+    },
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parentValue, { id }) {
+        const response = await axios.delete(
+          `http://localhost:3000/users/${id}`
+        );
+        return response.data;
+      },
     },
   },
 });
 
 export const schema = new GraphQLSchema({
   query: RootQuery,
+  mutation,
 });
 
 // use w/GraphiQL f/ spreading query params
