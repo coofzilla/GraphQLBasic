@@ -99,6 +99,21 @@ const mutation = new graphql_1.GraphQLObjectType({
                 });
             },
         },
+        editUser: {
+            type: UserType,
+            args: {
+                id: { type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString) },
+                firstName: { type: graphql_1.GraphQLString },
+                age: { type: graphql_1.GraphQLInt },
+                companyId: { type: graphql_1.GraphQLString },
+            },
+            resolve(parentValue, args) {
+                return __awaiter(this, void 0, void 0, function* () {
+                    const response = yield axios_1.default.patch(`http://localhost:3000/users/${args.id}`, args);
+                    return response.data;
+                });
+            },
+        },
         deleteUser: {
             type: UserType,
             args: {
